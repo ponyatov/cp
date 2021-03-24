@@ -1,0 +1,45 @@
+#!/usr/bin/python3
+
+import os,sys
+
+def USER():
+    return 'ponyatov'
+
+def LIMIT(group):
+    return f'/sys/fs/cgroup/memory/{group}/memory.limit_in_bytes'
+
+def SWAPS(group):
+    return f'/sys/fs/cgroup/memory/{group}/memory.swappiness'
+
+def PROCS(group):
+    return f'/sys/fs/cgroup/memory/{group}/cgroup.procs'
+
+def cmd(it,result=True):
+    print(it)
+    if result:
+        print(os.system(it))
+    else:
+        os.system(it)
+
+def limit(group):
+    try:
+        return {
+            'telegram':'256M',
+			'spotify':'512M',
+			'pharo':'512M',
+        }[group]
+    except KeyError:
+        return '2G'
+
+def create(group):
+    cmd(f'cgcreate -g memory:{group} -a {USER()}:{USER()} -t {USER()}:{USER()}')
+    cmd(f'echo {limit(group)} > {LIMIT(group)}',0)
+    cmd(f'cat {LIMIT(group)}',0)
+    cmd(f'echo 1  > {SWAPS(group)}',0)
+    cmd(f'cat {SWAPS(group)}',0)
+
+
+if __name__ == '__main__':
+    assert sys.argv[1] in ['start','restart']
+    for g in ['code','chrome','telegram','spotify','pharo']:
+        create(g)
