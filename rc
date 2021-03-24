@@ -1,0 +1,6 @@
+#!/bin/sh
+# ssh-add
+git gui &
+excode . &
+git fetch --all
+git pull -v
