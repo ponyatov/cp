@@ -1,4 +1,4 @@
-# Metaprogramming not works
+# Metaprogramming not works {#metanotworks}
 
 My idea with metaprogramming via source code generation tends not works due to
 the unpredicted complexity rise while I'm trying to reimplement the `metaL`

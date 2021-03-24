@@ -10,10 +10,6 @@ github: https://github.com/ponyatov/cp
 * use `meld`onium for manual hotfixes
 
 
-### Metaprogramming not works
+@ref metanotworks
 
-
-
-## Links
-
-see doc/links.md
+@ref links
