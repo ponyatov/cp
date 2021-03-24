@@ -27,9 +27,10 @@ IEX    = iex
 
 # \ src
 P     += config.py
-S     += $(MODULE).py test_$(MODULE).py
-S     += metaL.py test_metaL.py
-S     += EDS.py
+Y     += $(MODULE).py test_$(MODULE).py
+Y     += metaL.py test_metaL.py
+Y     += EDS.py
+S     += $(Y)
 # / src
 
 # \ obj
@@ -53,7 +54,7 @@ test: $(PYT) test_metaL.py
 .PHONY: format
 format: $(PEP)
 	$(MIX) format
-$(PEP): $(S)
+$(PEP): $(Y)
 	$@ --ignore=E26,E302,E401,E402,E701,E702 --in-place $? && touch $@
 
 # \ elixir
@@ -146,6 +147,7 @@ static/js/peg.min.js:
 MERGE += README.md LICENSE Makefile .gitignore apt.txt apt.dev
 MERGE += .vscode bin doc tmp
 MERGE += requirements.txt $(S) mix.exs lib src test
+MERGE += geo
 .PHONY: main
 main:
 	git push -v
