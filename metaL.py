@@ -11,7 +11,8 @@ import config
 import os, sys, re
 import datetime as dt
 
-## @defgroup core the Core
+## @defgroup core Core
+## @ingroup metaL
 
 ## @defgroup Object Object
 ## base object graph node class = Marvin Minsky's Frame
@@ -43,8 +44,8 @@ class Object:
         ret = self.pad(depth) + self.head(prefix, test)
         # cycle
         if not depth: cycle = []
-        if self in cycle: return ret + ' _/'
-        else: cycle += [self]
+        if id(self) in cycle: return ret + ' _/'
+        else: cycle += [id(self)]
         # slot{}s
         for i in self.keys():
             ret += self[i].dump(cycle, depth + 1, f'{i} = ', test)
@@ -111,11 +112,6 @@ class Object:
 
 ## @}
 
-class Env(Object): pass
-
-
-glob = Env('global'); glob << glob >> glob
-
 
 ## @defgroup Primitive Primitive
 ## @ingroup core
@@ -132,11 +128,13 @@ class Primitive(Object):
 ## floating point
 class Number(Primitive):
     def __init__(self, V, prec=4):
-        Primitive.__init__(self, float(V))
+        if V: Primitive.__init__(self, float(V))
+        else: Primitive.__init__(self, V)
         ## precision: digits after `.`
         self.prec = 4
 
-    def val(self): return f'{round(self.value,self.prec)}'
+    def val(self):
+        return f'{round(self.value,self.prec)}' if self.value else ''
 
     ## `+`
     def __add__(self, that):
@@ -146,6 +144,7 @@ class Number(Primitive):
 
 class Integer(Number):
     def __init__(self, V):
+        self.prec = 0
         if isinstance(V, int) or isinstance(V, float):
             Primitive.__init__(self, int(V))
         elif '.' in V:
@@ -196,19 +195,66 @@ class Name(Primitive): pass
 ## @}
 
 ## @defgroup Unit Unit
-## data container
-## @ingroup core
+## measurement unit (physical value)
 ## @{
 
+class Unit(Number):
+    suffix = '?'
+    ## rex for removing suffix from some '"1234 suffix"`
+    delunitrex = '^$'
+
+    def __init__(self, V, prec=4):
+        if isinstance(V, str):
+            V = re.sub(self.__class__.delunitrex, '', V)
+            V = re.sub(r',', r'.', V)
+            if V in ['', '-', '--', '-?-']: V = None
+        super().__init__(V, prec)
+
+    def __eq__(self, that):
+        raise NotImplemented([Unit, that])
+
+    # def val(self):
+    #     if self.value != None:
+    #         return f'{self.value}'#\u2009{self.__class__.suffix}'
+    #     else: return ''
+
+    def html(self): self.val()
+
+## градус Цельсия
+class C(Unit):
+    suffix = '\u2103'
+
+## сантиметры
+class cm(Unit):
+    suffix = 'см'
+    delunitrex = r'\s*(см)$'
+
+## метры
+class m(Unit):
+    suffix = 'м'
+
+## метры в Балтийской системе высот
+class mBS(m):
+    suffix = 'мБс'
+    delunitrex = r'\s*(мБс|мБС)$'
+
+## метры кубические/секунду (?)
+class m3c(Unit):
+    suffix = 'м\u00B3/c'
+
+## метры/секунду (ветер)
+class ms(Unit):
+    suffix = 'м/c'
+
 ## @}
 
 ## @}
+
 
 ## @defgroup Container Container
 ## data container
 ## @ingroup core
 ## @{
-
 
 class Container(Object): pass
 
@@ -227,14 +273,102 @@ class Stack(Container): pass
 ## FIFO
 class Queue(Container): pass
 
-class Meta(Object):
+## @}
+
+## @defgroup Active Active
+## executable data
+## @ingroup core
+## @{
+
+class Active(Object): pass
+
+## @defgroup Env Env
+## environment = namespace
+## @{
+
+## environment = namespace
+class Env(Active, Map): pass
+
+
+## global environment
+glob = Env('global'); glob << glob >> glob
+
+## @}
+
+class Meta(Object): pass
+
+class S(Meta, String): pass
+
+class Sec(Meta): pass
+
+class Class(Meta): pass
+
+
+## @defgroup IO IO
+## @ingroup core
+## @{
+
+## input/output
+class IO(Object): pass
+
+class Time(IO):
+    def __init__(self):
+        self.now = dt.datetime.now()
+        self.date = self.now.strftime('%Y-%m-%d')
+        self.time = self.now.strftime('%H:%M:%S')
+        super().__init__(f'{self.now}')
+
+    def json(self):
+        return {"date": self.date, "time": self.time}
+
+## file path
+class Path(IO): pass
+
+## directory
+class Dir(IO): pass
+
+## file
+class File(IO): pass
+
+## @defgroup Net Net
+## network
+## @{
+
+class Net(IO): pass
+
+class Socket(Net): pass
+
+## IP address
+class Ip(Net): pass
+
+## IP Port
+class Port(Net): pass
+
+class EMail(Net): pass
+
+class Url(Net): pass
+
+## @}
+
+## @}
+
+## @defgroup Web Web
+## Web interface
+## @ingroup core
+## @{
+
+class Web(Net): pass
+
+
+import flask
+from flask_socketio import SocketIO
+
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+## Web server engine (back web server + ....)
+class Engine(Web): pass
+
+## Flask wrapper
+class Flask(Engine):
     pass
-
-class S(Primitive):
-
-class Sec(Primitive):
-
-class Class(Meta):
-
-
-

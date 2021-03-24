@@ -152,8 +152,8 @@ static/js/peg.min.js:
 
 # \ merge
 MERGE += README.md LICENSE Makefile .gitignore apt.txt apt.dev doxy.gen
-MERGE += .vscode bin doc tmp src test
-MERGE += requirements.txt $(S) mix.exs lib
+MERGE += .vscode bin doc tmp src lib test
+MERGE += requirements.txt $(S) mix.exs .formatter.exs
 MERGE += geo
 .PHONY: main
 main:
