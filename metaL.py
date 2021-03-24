@@ -359,6 +359,7 @@ class Url(Net): pass
 
 class Web(Net): pass
 
+glob << Web('interface')
 
 import flask
 from flask_socketio import SocketIO
@@ -371,4 +372,56 @@ class Engine(Web): pass
 
 ## Flask wrapper
 class Flask(Engine):
-    pass
+    def __init__(self):
+        super().__init__(self.tag())
+        glob['web']['engine'] = self
+        self.app = flask.Flask(__name__)
+        self.app.config['SECRET_KEY'] = config.SECRET_KEY
+        self.sio = SocketIO(self.app)
+
+    def eval(self, env):
+        self.route(env)
+        self.socket(env)
+        self.inotify()
+        self.sio.run(self.app, debug=True, host=config.HOST, port=config.PORT)
+
+    def lookup(self, path):
+        item = glob
+        for i in filter(lambda i:i,path.split('/')): item = item[i]
+        return item
+
+    def inotify(self):
+        watch = Observer(); sio = self.sio
+
+        class event_handler(FileSystemEventHandler):
+            def on_closed(self, event):
+                if not event.is_directory:
+                    sio.emit('reload', f'{event}')
+        watch.schedule(event_handler(), 'static', recursive=True)
+        watch.schedule(event_handler(), 'templates', recursive=True)
+        watch.start()
+
+    def socket(self, env):
+        @self.sio.on('connect')
+        def connect(): self.sio.emit('localtime', Time().json(), broadcast=True)
+
+    def route(self, env):
+        @self.app.after_request
+        def force_no_caching(req):
+            req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            req.headers["Pragma"] = "no-cache"
+            req.headers["Expires"] = "0"
+            req.headers['Cache-Control'] = 'public, max-age=0'
+            return req
+
+        @self.app.route('/')
+        def index():
+            return flask.render_template('EDS.html', glob=glob, env=env)
+
+        @self.app.route('/<path:path>')
+        def dump(path):
+            item = glob
+            for i in path.split('/'):
+                if i: item = item[i]
+            return flask.render_template('EDS.html', glob=glob, env=item)
+
