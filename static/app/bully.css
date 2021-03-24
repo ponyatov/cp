@@ -1,0 +1,42 @@
+#report         { width:100vw; }
+#report *       { border: 1px solid yellow; }
+
+#head *         { text-align: center; }
+#company p      { margin-bottom:0; }
+
+#ugmslogo       { width:9vw; }
+#timestamp      { width:9vw; min-width:9vw; }
+#logoimg        { width:9vw; min-width:32px; }
+
+#reportnumber   { width:3vw; }
+
+#ugms,#user     { width: 18vw; }
+#ugms p         { margin-bottom:0; }
+#user p         { margin-bottom:0; }
+#bully          { text-align:center; }
+#areabox        { text-align: right; }
+#area           { text-align-last: right; }
+#area option    { direction: rtl; }
+
+#map            { text-align: center; height:15cm; }
+#map *          { border:none !important; }
+.map-area       { background:none !important; fill-opacity: 0;}
+.map-popup      { color:blue; }
+
+textarea                        { width:100%; }
+input,select,option,textarea    { color:aqua; height:auto; }
+/* input,select,option { background:lightyellow; } */
+h3              { font-size: 2vh; text-align: center;}
+/* #important      { width:100%; min-height: 50mm; } */
+
+#pochva > td    { width:5vw; text-align: center; }
+
+@media print {
+    @page           { margin:5mm; margin-left:30mm; }
+    body            { padding:0; }
+    *               { color:black !important; }
+    #report *       { border: none; }
+    a               { text-decoration: none !important; }
+    a[href]:after   { display:none; }
+    #ugms,#user     { width: 20vw; }
+}
