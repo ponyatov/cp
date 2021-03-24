@@ -1,0 +1,47 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label":          "project: install",
+			"type":           "shell",
+			"command":        "make install",
+			"problemMatcher": []
+		},
+		{
+			"label":          "project: update",
+			"type":           "shell",
+			"command":        "make update",
+			"problemMatcher": []
+		},
+		{
+			"label":          "metaL: all",
+			"type":           "shell",
+			"command":        "make all",
+			"problemMatcher": []
+		},
+		{
+			"label":          "make: web",
+			"type":           "shell",
+			"command":        "make web",
+			"problemMatcher": []
+		},
+		{
+			"label":          "metaL: repl",
+			"type":           "shell",
+			"command":        "make repl",
+			"problemMatcher": []
+		},
+		{
+			"label":          "metaL: test",
+			"type":           "shell",
+			"command":        "make test",
+			"problemMatcher": []
+		},
+		{
+			"label":          "metaL: format",
+			"type":           "shell",
+			"command":        "make format",
+			"problemMatcher": []
+		},
+    ]
+}

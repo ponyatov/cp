@@ -1,0 +1,17 @@
+*~
+*.swp
+*.log
+
+/docs/
+
+/pyvenv.cfg
+/lib/python*/
+/lib64
+/share/python*/
+/include/site/python*/
+/__pycache__/
+
+*.beam
+/_build/
+/deps/
+/mix.lock
