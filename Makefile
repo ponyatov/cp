@@ -74,13 +74,16 @@ doxy: doxy.gen
 
 .PHONY: doc
 doc: \
-	doc/SICP_ru.pdf doc/Armstrong_ru.pdf doc/Dragon_ru.pdf
+	doc/SICP_ru.pdf doc/Dragon_ru.pdf \
+	doc/Erlang/Armstrong_ru.pdf doc/Erlang/ElixirInAction.pdf
 doc/SICP_ru.pdf:
 	$(CURL) $@ https://newstar.rinet.ru/~goga/sicp/sicp.pdf
-doc/Armstrong_ru.pdf:
-	$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf
 doc/Dragon_ru.pdf:
 	$(CURL) $@ https://linux-doc.ru/programming/assembler/book/compilers.pdf
+doc/Erlang/Armstrong_ru.pdf:
+	$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf
+doc/Erlang/ElixirInAction.pdf:
+	$(CURL) $@ https://github.com/levunguyen/CGDN-Ebooks/raw/master/Java/Elixir%20in%20Action%2C%202nd%20Edition.pdf
 # / doc
 
 # \ install
