@@ -67,6 +67,11 @@ iex:
 # / all
 
 # \ doc
+
+.PHONY: doxy
+doxy: doxy.gen
+	doxygen doxy.gen 1>/dev/null
+
 .PHONY: doc
 doc: \
 	doc/SICP_ru.pdf doc/Armstrong_ru.pdf
@@ -144,9 +149,9 @@ static/js/peg.min.js:
 # / install
 
 # \ merge
-MERGE += README.md LICENSE Makefile .gitignore apt.txt apt.dev
-MERGE += .vscode bin doc tmp
-MERGE += requirements.txt $(S) mix.exs lib src test
+MERGE += README.md LICENSE Makefile .gitignore apt.txt apt.dev doxy.gen
+MERGE += .vscode bin doc tmp src test
+MERGE += requirements.txt $(S) mix.exs lib
 MERGE += geo
 .PHONY: main
 main:

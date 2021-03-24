@@ -37,7 +37,7 @@
 		"**/pyvenv.cfg":true, "**/*.pyc":true,
 		// / py
 		// \ ex
-		"**/_build/**":true, "**/.elixir_ls/**":true,
+		"**/deps/**":true, "**/_build/**":true, "**/.elixir_ls/**":true,
 		// / ex
 	},
 	"files.exclude": {
@@ -49,7 +49,7 @@
 		"**/pyvenv.cfg":true, "**/*.pyc":true,
 		// / py
 		// \ ex
-		"**/_build/**":true, "**/.elixir_ls/**":true,
+		"**/deps/**":true, "**/_build/**":true, "**/.elixir_ls/**":true,
 		// / ex
 	},
 	"files.associations": {
