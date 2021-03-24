@@ -43,5 +43,11 @@
 			"command":        "make format",
 			"problemMatcher": []
 		},
+		{
+			"label":          "make: doxy",
+			"type":           "shell",
+			"command":        "make doxy",
+			"problemMatcher": []
+		},
     ]
 }
