@@ -60,6 +60,8 @@ $(PEP): $(S)
 .PHONY: iex
 iex:
 	$(IEX) -S $(MIX)
+	$(MAKE) format
+	$(MAKE) $@
 # / elixir
 # / all
 
@@ -77,12 +79,13 @@ doc/Armstrong_ru.pdf:
 .PHONY: install
 install: $(OS)_install js doc
 	$(MAKE) $(PIP)
+	$(MIX) deps.get
 	$(MAKE) update
 .PHONY: update
 update: $(OS)_update
 	$(PIP) install -U    pip autopep8
 	$(PIP) install -U -r requirements.txt
-	$(MIX) deps.get
+	$(MIX) deps.update --all
 .PHONY: Linux_install Linux_update
 Linux_install Linux_update:
 	sudo apt update
@@ -139,4 +142,30 @@ static/js/peg.min.js:
 # / js
 # / install
 
-
+# \ merge
+MERGE += README.md Makefile .gitignore apt.txt apt.dev
+MERGE += .vscode bin doc tmp
+MERGE += requirements.txt $(S) mix.exs lib src test
+.PHONY: main
+main:
+	git push -v
+	git checkout $@
+	git pull -v
+	git checkout shadow -- $(MERGE)
+.PHONY: shadow
+shadow:
+	git push -v
+	git checkout $@
+	git pull -v
+.PHONY: release
+release:
+	git tag $(NOW)-$(REL)
+	git push -v && git push -v --tags
+	$(MAKE) shadow
+.PHONY: zip
+zip:
+	git archive \
+		--format zip \
+		--output $(TMP)/$(MODULE)_$(NOW)_$(REL).src.zip \
+	HEAD
+# / merge

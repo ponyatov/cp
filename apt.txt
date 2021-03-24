@@ -1,5 +1,5 @@
 git make curl
 python3 python3-venv
 erlang elixir
-clojure
+openjdk-11-jdk clojure
 sqlite3

@@ -6,7 +6,8 @@
 github: https://github.com/ponyatov/cp
 
 * collect your code snippets
-* use copy & paste magic
+* rock with copy & paste magic
+* use `meld`onium for manual hotfixes
 
 ## Links
 
