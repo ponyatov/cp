@@ -143,7 +143,7 @@ static/js/peg.min.js:
 # / install
 
 # \ merge
-MERGE += README.md Makefile .gitignore apt.txt apt.dev
+MERGE += README.md LICENSE Makefile .gitignore apt.txt apt.dev
 MERGE += .vscode bin doc tmp
 MERGE += requirements.txt $(S) mix.exs lib src test
 .PHONY: main
