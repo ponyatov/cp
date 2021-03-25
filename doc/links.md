@@ -20,6 +20,8 @@
 * [armstrong/ru] Джо Армстронг <br>
 [Программирование на Эрланге. ПО для параллельного мира](https://github.com/dyp2000/Russian-Armstrong-Erlang) <br>
     переводчик: Владислав Игнатов
+* [LYSE] Learn You Some Erlang for Great Good!
+    https://learnyousomeerlang.com/content
 * [otp/ru] Чезарини Франческо, Виноски Стивен <br>
     **Проектирование масштабируемых систем с помощью Erlang/OTP** <br>
     ДМК Пресс, 2017
