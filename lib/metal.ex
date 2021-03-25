@@ -10,4 +10,10 @@ defmodule Metal do
   def hello do
     :world
   end
+
+  IO.puts "Hello"
+
+  list = [1, 2, 3, 4]
+  list |> List.delete_at(-1)
+  list ++ [1]
 end
