@@ -314,12 +314,13 @@ class IO(Object): pass
 class Time(IO):
     def __init__(self):
         self.now = dt.datetime.now()
+        super().__init__(f'{self.now}')
+        self.isodate = self.now.strftime('%Y-%m-%d')
         self.date = self.now.strftime('%Y-%m-%d')
         self.time = self.now.strftime('%H:%M:%S')
-        super().__init__(f'{self.now}')
 
     def json(self):
-        return {"date": self.date, "time": self.time}
+        return {"isodate": self.isodate, "date": self.date, "time": self.time}
 
 ## file path
 class Path(IO): pass
@@ -350,6 +351,31 @@ class Url(Net): pass
 
 ## @}
 
+## @defgroup GUI GUI
+## abstract graphical user interface
+## @{
+
+class GUI(Object):
+    def onch(self):
+        return f'onchange="gui_onchange(\'{self.gid()}\',\'{self.value}\',this.value)"'
+
+    def grammarly(self, state=False):
+        return f'data-gramm={"true" if state else "false"}'
+
+
+gui = GUI('view'); glob << gui
+
+class View(GUI):
+    pass
+
+class TextArea(View):
+    pass
+
+class Input(View):
+    pass
+
+
+
 ## @}
 
 ## @defgroup Web Web
@@ -358,6 +384,7 @@ class Url(Net): pass
 ## @{
 
 class Web(Net): pass
+
 
 glob << Web('interface')
 
@@ -387,8 +414,43 @@ class Flask(Engine):
 
     def lookup(self, path):
         item = glob
-        for i in filter(lambda i:i,path.split('/')): item = item[i]
+        for i in filter(lambda i: i, path.split('/')): item = item[i]
         return item
+
+    ## classical HTTP
+    def route(self, env):
+        @self.app.after_request
+        def force_no_caching(req):
+            req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+            req.headers["Pragma"] = "no-cache"
+            req.headers["Expires"] = "0"
+            req.headers['Cache-Control'] = 'public, max-age=0'
+            return req
+
+        @self.app.route('/dump/<path:path>')
+        @self.app.route('/dump/')
+        def dump(path=''):
+            return flask.render_template('dump.html',
+                                         glob=glob, env=self.lookup(path),
+                                         app=glob['app'], user=glob['app']['user'])
+
+        @self.app.route('/<path:path>')
+        @self.app.route('/')
+        def html(path=''):
+            return flask.render_template('index.html',
+                                         glob=glob, env=self.lookup(path),
+                                         app=glob['app'], user=glob['app']['user'])
+
+    ## SocketIO messaging
+    def socket(self, env):
+
+        @self.sio.on('connect')
+        def connect():
+            localtime()
+
+        @self.sio.on('localtime')
+        def localtime():
+            self.sio.emit('localtime', Time().json(), broadcast=True)
 
     def inotify(self):
         watch = Observer(); sio = self.sio
@@ -401,27 +463,5 @@ class Flask(Engine):
         watch.schedule(event_handler(), 'templates', recursive=True)
         watch.start()
 
-    def socket(self, env):
-        @self.sio.on('connect')
-        def connect(): self.sio.emit('localtime', Time().json(), broadcast=True)
 
-    def route(self, env):
-        @self.app.after_request
-        def force_no_caching(req):
-            req.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-            req.headers["Pragma"] = "no-cache"
-            req.headers["Expires"] = "0"
-            req.headers['Cache-Control'] = 'public, max-age=0'
-            return req
-
-        @self.app.route('/')
-        def index():
-            return flask.render_template('EDS.html', glob=glob, env=env)
-
-        @self.app.route('/<path:path>')
-        def dump(path):
-            item = glob
-            for i in path.split('/'):
-                if i: item = item[i]
-            return flask.render_template('EDS.html', glob=glob, env=item)
 

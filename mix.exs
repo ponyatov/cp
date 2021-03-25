@@ -19,6 +19,11 @@ defmodule Metal.MixProject do
 
   defp deps do
     [
+      # {:phoenix, "~> 1.5.8"},
+      # {:jason, "~> 1.0"},
+      # {:phoenix_ecto, "~> 4.1"},
+      # {:ecto_sql, "~> 3.4"},
+      # {:postgrex, ">= 0.0.0"},
       {:cowboy, "~> 2.8"},
       {:exsync, "~> 0.2", only: :dev}
     ]
