@@ -29,6 +29,7 @@
 
 	// \ files
 	"files.watcherExclude": {
+		"**/docs/**":true,
 		// \ py
 		"**/__pycache__/**":true, "**/.pytest_cache/**":true,
 		"**/bin/**":true,
@@ -41,6 +42,7 @@
 		// / ex
 	},
 	"files.exclude": {
+		"**/docs/**":true,
 		// \ py
 		"**/__pycache__/**":true, "**/.pytest_cache/**":true,
 		"**/bin/**":true,
