@@ -60,7 +60,7 @@ class Object:
 
     ## short `<T:V>` header-only dump
     def head(self, prefix='', test=False):
-        gid = '' if test else f' @{self.gid()}'
+        gid = '' if test else ' ' + self.gid()
         return f'{prefix}<{self.tag()}:{self.val()}>{gid}'
 
     ## `<T:` object class/tag
@@ -121,6 +121,11 @@ class Primitive(Object):
     def eval(self, env): return self
     def html(self): return f'{self.value}'
 
+class Nil(Primitive):
+    fromstr = ['', '-', '--', '-?-']
+    html = '\u2014'
+    def __init__(self): super().__init__('')
+
 ## @defgroup Number Number
 ## numbers
 ## @{
@@ -128,13 +133,19 @@ class Primitive(Object):
 ## floating point
 class Number(Primitive):
     def __init__(self, V, prec=4):
-        if V: Primitive.__init__(self, float(V))
-        else: Primitive.__init__(self, V)
+        if V == None: Primitive.__init__(self, V)
+        else: Primitive.__init__(self, float(V))
         ## precision: digits after `.`
-        self.prec = 4
+        self.prec = prec
 
     def val(self):
-        return f'{round(self.value,self.prec)}' if self.value else ''
+        if self.value == None: return Nil.html
+        if isinstance(self.value,float):
+            if not self.prec:
+                return f'{int(self.value)}'
+            else:
+                return f'{round(self.value,self.prec)}'
+        raise TypeError(['val',type(self.value),self.value])
 
     ## `+`
     def __add__(self, that):
@@ -155,6 +166,12 @@ class Integer(Number):
             Bin.__init__(self, V)
         else:
             Primitive.__init__(self, int(V))
+
+    def val(self):
+        if self.value == None: return Nil.html
+        if isinstance(self.value,int):
+            return f'{self.value}'
+        raise TypeError(['val',type(self.value),self.value])
 
     def __truediv__(self, that):
         if isinstance(that, Number) or isinstance(that, Integer):
@@ -203,22 +220,15 @@ class Unit(Number):
     ## rex for removing suffix from some '"1234 suffix"`
     delunitrex = '^$'
 
-    def __init__(self, V, prec=4):
+    def __init__(self, V=None, prec=4):
         if isinstance(V, str):
             V = re.sub(self.__class__.delunitrex, '', V)
             V = re.sub(r',', r'.', V)
-            if V in ['', '-', '--', '-?-']: V = None
+            if V in Nil.fromstr: V = None
         super().__init__(V, prec)
 
     def __eq__(self, that):
-        raise NotImplemented([Unit, that])
-
-    # def val(self):
-    #     if self.value != None:
-    #         return f'{self.value}'#\u2009{self.__class__.suffix}'
-    #     else: return ''
-
-    def html(self): self.val()
+        raise NotImplementedError([Unit, that])
 
 ## градус Цельсия
 class C(Unit):
@@ -343,11 +353,15 @@ class Socket(Net): pass
 class Ip(Net): pass
 
 ## IP Port
-class Port(Net): pass
+class Port(Net, Integer): pass
 
-class EMail(Net): pass
+class EMail(Net):
+    def html(self):
+        return f'&lt;<a href="mailto:{self.value}">{self.value}</a>&gt;'
 
-class Url(Net): pass
+class Url(Net):
+    def html(self):
+        return f'<a href="{self.value}">{self.value}</a>'
 
 ## @}
 
@@ -356,8 +370,9 @@ class Url(Net): pass
 ## @{
 
 class GUI(Object):
-    def onch(self):
-        return f'onchange="gui_onchange(\'{self.gid()}\',\'{self.value}\',this.value)"'
+    def onch(self, event='onchange', getval='this.value'):
+        ret = f'{event}="gui_onchange(\'{self.gid()}\',\'{self.value}\',{getval})"'
+        return ret
 
     def grammarly(self, state=False):
         return f'data-gramm={"true" if state else "false"}'
@@ -366,13 +381,45 @@ class GUI(Object):
 gui = GUI('view'); glob << gui
 
 class View(GUI):
-    pass
+    def __init__(self, htmlid, model=None):
+        assert htmlid
+        super().__init__(htmlid)
+        if isinstance(model, str):
+            model = re.sub(r'[ \t\r\n]+$', r'', model, re.S)
+            model = re.sub(r'\s*(°C|°С|°)', '\u2009\u2103', model, re.S)
+        if model:
+            self // model
+            try: self.prefix = model.prefix
+            except AttributeError: self.prefix = ''
+            try: self.suffix = model.suffix
+            except AttributeError: self.suffix = ''
+        gui[self.gid()] = self # view registry
+
+    def onchange(self, value):
+        sio = glob['web']['engine'].sio
+        try:
+            self[0].value = self[0].__class__(value).value
+            sio.emit('gui/changed',[self.gid(),self.value,self[0].val()])
+        except ValueError:
+            sio.emit('gui/error',[self.gid(),self.value,value])
 
 class TextArea(View):
-    pass
+    def html(self):
+        val = ''.join(map(lambda i: i.html(), self))
+        rows = max(3, len(val.split('\n')))
+        return f'<textarea id="{self.value}" rows={rows} {self.grammarly()} {self.onch()}>{val}</textarea>'
 
 class Input(View):
-    pass
+    def html(self):
+        return f'<input id="{self.value}" {self.grammarly()} {self.onch()} value="{self[0].val()}">{self[0].suffix}</input>'
+
+## @}
+
+## @defgroup Web Web
+## GIS/Geolocation
+## @{
+
+import shapefile as shp
 
 
 
@@ -451,6 +498,12 @@ class Flask(Engine):
         @self.sio.on('localtime')
         def localtime():
             self.sio.emit('localtime', Time().json(), broadcast=True)
+
+        @self.sio.on('gui/onchange')
+        def gui_textarea(msg):
+            print('gui/onchange', msg)
+            gid, name, value = msg
+            gui[gid].onchange(value)
 
     def inotify(self):
         watch = Observer(); sio = self.sio
