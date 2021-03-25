@@ -103,10 +103,12 @@ install: $(OS)_install js doc
 	$(MAKE) $(PIP)
 	$(MIX) deps.get
 	$(MAKE) update
+	$(MIX) archive.install hex phx_new 1.5.8
 .PHONY: update
 update: $(OS)_update
 	$(PIP) install -U    pip autopep8
 	$(PIP) install -U -r requirements.txt
+	$(MIX) local.hex local.rebar
 	$(MIX) deps.update --all
 
 .PHONY: Linux_install Linux_update

@@ -9,3 +9,4 @@ internal mechanics:
 
 * Shankar Dhanasekaran <br>
     [Mastering Phoenix Framework](https://shankardevy.com/phoenix-inside-out-mpf/)
+* https://hexdocs.pm/phoenix/installation.html
