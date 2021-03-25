@@ -64,7 +64,7 @@ $(PEP): $(Y)
 # \ elixir
 .PHONY: iex
 iex:
-	$(IEX) -S $(MIX)
+	$(IEX) -S mix phx.server
 	$(MAKE) format
 	$(MAKE) $@
 # / elixir
@@ -83,12 +83,14 @@ doxy: doxy.gen
 .PHONY: doc
 doc: \
 	doc/SICP_ru.pdf doc/Dragon_ru.pdf \
-	doc/Erlang/Armstrong_ru.pdf doc/Erlang/ElixirInAction.pdf \
-	doc/Erlang/Phoenix.pdf
+	doc/Erlang/LYSE_ru.pdf doc/Erlang/Armstrong_ru.pdf \
+	doc/Erlang/ElixirInAction.pdf doc/Erlang/Phoenix.pdf
 doc/SICP_ru.pdf:
 	$(CURL) $@ https://newstar.rinet.ru/~goga/sicp/sicp.pdf
 doc/Dragon_ru.pdf:
 	$(CURL) $@ https://linux-doc.ru/programming/assembler/book/compilers.pdf
+doc/Erlang/LYSE_ru.pdf:
+	$(CURL) $@ https://github.com/mpyrozhok/learnyousomeerlang_ru/raw/master/pdf/learnyousomeerlang_ru.pdf
 doc/Erlang/Armstrong_ru.pdf:
 	$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf
 doc/Erlang/ElixirInAction.pdf:
@@ -104,6 +106,7 @@ install: $(OS)_install js doc
 	$(MIX) deps.get
 	$(MAKE) update
 	$(MIX) archive.install hex phx_new 1.5.8
+	$(MIX) ecto.create
 .PHONY: update
 update: $(OS)_update
 	$(PIP) install -U    pip autopep8
