@@ -1,36 +1,37 @@
 # \ var
-MODULE = $(notdir $(CURDIR))
-OS     = $(shell uname -s)
-NOW    = $(shell date +%d%m%y)
-REL    = $(shell git rev-parse --short=4 HEAD)
-CORES  = $(shell grep processor /proc/cpuinfo| wc -l)
+MODULE  = $(notdir $(CURDIR))
+OS      = $(shell uname -s)
+MACHINE = $(shell uname -m)
+NOW     = $(shell date +%d%m%y)
+REL     = $(shell git rev-parse --short=4 HEAD)
+CORES   = $(shell grep processor /proc/cpuinfo| wc -l)
 # / var
 
 # \ dir
-CWD    = $(CURDIR)
-BIN    = $(CWD)/bin
-DOC    = $(CWD)/doc
-TMP    = $(CWD)/tmp
+CWD     = $(CURDIR)
+BIN     = $(CWD)/bin
+DOC     = $(CWD)/doc
+TMP     = $(CWD)/tmp
 # / dir
 
 # \ tool
-CURL   = curl -L -o
-PY     = bin/python3
-PIP    = bin/pip3
-PEP    = bin/autopep8
-PYT    = bin/pytest
-ERL    = erl
-ERLC   = erlc
-MIX    = mix
-IEX    = iex
+CURL    = curl -L -o
+PY      = bin/python3
+PIP     = bin/pip3
+PEP     = bin/autopep8
+PYT     = bin/pytest
+ERL     = erl
+ERLC    = erlc
+MIX     = mix
+IEX     = iex
 # / tool
 
 # \ src
-P     += config.py
-Y     += $(MODULE).py test_$(MODULE).py
-Y     += metaL.py test_metaL.py
-Y     += EDS.py
-S     += $(Y)
+P      += config.py
+Y      += $(MODULE).py test_$(MODULE).py
+Y      += metaL.py test_metaL.py
+Y      += EDS.py
+S      += $(Y)
 # / src
 
 # \ obj
@@ -51,6 +52,7 @@ test: $(PYT) test_metaL.py
 	$^
 	$(MAKE) format
 	$(MIX)  test
+
 .PHONY: format
 format: $(PEP)
 	$(MIX) format
@@ -65,6 +67,11 @@ iex:
 	$(MAKE) $@
 # / elixir
 # / all
+
+# \ nginx
+NGINX   = $(CWD)/local/bin/nginx
+
+# / nginx
 
 # \ doc
 
@@ -94,6 +101,7 @@ update: $(OS)_update
 	$(PIP) install -U    pip autopep8
 	$(PIP) install -U -r requirements.txt
 	$(MIX) deps.update --all
+
 .PHONY: Linux_install Linux_update
 Linux_install Linux_update:
 	sudo apt update
@@ -111,7 +119,8 @@ js: \
 	static/js/bootstrap.min.css static/js/bootstrap.dark.css \
 	static/js/bootstrap.min.js  static/js/jquery.min.js \
 	static/js/html5shiv.min.js  static/js/respond.min.js \
-	static/js/socket.io.min.js  static/js/peg.min.js
+	static/js/socket.io.min.js  static/js/peg.min.js \
+	static/js/leaflet/leaflet.js static/js/leaflet/leaflet.css
 
 CDNJS = https://cdnjs.cloudflare.com/ajax/libs
 
@@ -147,14 +156,26 @@ static/js/socket.io.min.js.map:
 PEGJS_VER = 0.10.0
 static/js/peg.min.js:
 	$(CURL) $@ https://github.com/pegjs/pegjs/releases/download/v$(PEGJS_VER)/peg-$(PEGJS_VER).min.js
+
+LEAFLET_VER = 1.7.1
+LEAFLET_GZ  = tmp/leaflet.zip
+LEAFLET_CDN = http://cdn.leafletjs.com/leaflet/v$(LEAFLET_VER)/leaflet.zip
+$(LEAFLET_GZ):
+	$(CURL) $@ $(LEAFLET_CDN)
+static/js/leaflet/leaflet.css: static/js/leaflet/leaflet.js
+	touch $@
+static/js/leaflet/leaflet.js: $(LEAFLET_GZ)
+	unzip -d static/js/leaflet $< leaflet.css leaflet.js* images/* && touch $@
+
 # / js
 # / install
 
 # \ merge
-MERGE += README.md LICENSE Makefile .gitignore apt.txt apt.dev doxy.gen
+MERGE += README.md Makefile .gitignore apt.txt apt.dev LICENSE doxy.gen
 MERGE += .vscode bin doc tmp src lib test
 MERGE += requirements.txt $(S) mix.exs .formatter.exs
 MERGE += geo
+
 .PHONY: main
 main:
 	git push -v
