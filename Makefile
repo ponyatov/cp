@@ -44,9 +44,11 @@ S      += $(Y)
 all: $(PY) metaL.py
 	$^ $@
 	$(MAKE) format
+
 .PHONY: web
 web: $(PY) metaL.py
 	$^ $@
+
 .PHONY: test
 test: $(PYT) test_metaL.py
 	$^
@@ -82,7 +84,8 @@ doxy: doxy.gen
 .PHONY: doc
 doc: \
 	doc/SICP_ru.pdf doc/Dragon_ru.pdf \
-	doc/Erlang/Armstrong_ru.pdf doc/Erlang/ElixirInAction.pdf
+	doc/Erlang/Armstrong_ru.pdf doc/Erlang/ElixirInAction.pdf \
+	doc/Erlang/Phoenix.pdf
 doc/SICP_ru.pdf:
 	$(CURL) $@ https://newstar.rinet.ru/~goga/sicp/sicp.pdf
 doc/Dragon_ru.pdf:
@@ -91,6 +94,8 @@ doc/Erlang/Armstrong_ru.pdf:
 	$(CURL) $@ https://github.com/dyp2000/Russian-Armstrong-Erlang/raw/master/pdf/fullbook.pdf
 doc/Erlang/ElixirInAction.pdf:
 	$(CURL) $@ https://github.com/levunguyen/CGDN-Ebooks/raw/master/Java/Elixir%20in%20Action%2C%202nd%20Edition.pdf
+doc/Erlang/Phoenix.pdf:
+	$(CURL) $@ http://www.r-5.org/files/books/computers/languages/erlang/phoenix/Chris_McCord_Bruce_Tate_Jose_Valim-Programming_Phoenix-EN.pdf
 # / doc
 
 # \ install
