@@ -1,2 +1,3 @@
 git make curl
 build-essential
+libncurses-dev

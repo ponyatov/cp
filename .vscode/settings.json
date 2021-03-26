@@ -59,6 +59,8 @@
 	},
 	"files.associations": {
 		"requirements.*": "config",
+		"*.br": "kconfig",
+		"*.kernel": "kconfig",
 	},
 	// / files
 

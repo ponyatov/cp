@@ -24,10 +24,16 @@ BUILDROOT_GZ  = $(BUILDROOT).tar.gz
 br: $(BUILDROOT)/README
 	cd $(BUILDROOT) ;\
 	rm .config ; make allnoconfig ;\
+	cat ../all.kernel													\
+		../arch/$(ARCH).kernel ../cpu/$(CPU).kernel ../hw/$(HW).kernel	\
+		../app/$(APP).bkernel 											>> .config.kernel ;\
 	cat ../all.br											\
 		../arch/$(ARCH).br ../cpu/$(CPU).br ../hw/$(HW).br	\
 		../app/$(APP).br 									>> .config ;\
-	make menuconfig
+	echo "BR2_TARGET_GENERIC_HOSTNAME=\"$(APP)\"" 			>> .config ;\
+	make menuconfig ;\
+	make linux-menuconfig ;\
+	make
 
 $(BUILDROOT)/README: $(GZ)/$(BUILDROOT_GZ)
 	tar zx < $< && touch $@

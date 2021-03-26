@@ -1,1 +1,12 @@
-BR2_i386=n
+BR2_i386=y
+
+# fw images
+
+BR2_TARGET_ROOTFS_ISO9660=y
+BR2_TARGET_ROOTFS_ISO9660_HYBRID=y
+
+# bootloader
+
+BR2_TARGET_SYSLINUX=y
+BR2_TARGET_SYSLINUX_ISOLINUX=y
+BR2_TARGET_SYSLINUX_C32="libcom32.c32 libutil.c32 ldlinux.c32 chain.c32 menu.c32 cat.c32 cpu.c32 cpuid.c32 meminfo.c32 pci.c32 vesa.c32 vesainfo.c32 vesamenu.c32"
