@@ -2,6 +2,10 @@
 
 ## Python
 
+## Nim
+
+* https://nim-lang.org/
+
 ## Java
 
 ## Lisp

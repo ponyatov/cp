@@ -40,6 +40,9 @@
 		// \ ex
 		"**/deps/**":true, "**/_build/**":true, "**/.elixir_ls/**":true,
 		// / ex
+		// \ cross
+		"/cross/buildroot-*/":true,
+		// / cross
 	},
 	"files.exclude": {
 		"**/docs/**":true,

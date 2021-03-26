@@ -1,0 +1,23 @@
+#!/bin/sh
+
+export PATH="$HOME/bin:$PATH"
+# export LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
+
+# Nim
+
+export PATH="$HOME/.nimble/bin:$PATH"
+
+# Java
+
+export JAVA_HOME=$(dirname $(dirname $(readlink -e $(which javac))))
+export PATH="$JAVA_HOME/bin:$PATH"
+
+# Rust
+
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# # GemStone
+# export GEMSTONE="/home/ponyatov/seaside/GemStone/GemStone64"
+# export PATH="$GEMSTONE/bin:$PATH"
+# export GS_HOME="/home/ponyatov/seaside/GemStone/GsDevKit"
+# export PATH="$GS_HOME/bin:$PATH"

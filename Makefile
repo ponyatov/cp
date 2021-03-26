@@ -12,6 +12,8 @@ CWD     = $(CURDIR)
 BIN     = $(CWD)/bin
 DOC     = $(CWD)/doc
 TMP     = $(CWD)/tmp
+SRC     = $(CWD)/src
+GZ      = $(HOME)/gz
 # / dir
 
 # \ tool
@@ -24,6 +26,8 @@ ERL     = erl
 ERLC    = erlc
 MIX     = mix
 IEX     = iex
+NIMB    = nimble
+NIMP	= nimpretty
 # / tool
 
 # \ src
