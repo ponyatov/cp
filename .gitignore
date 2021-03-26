@@ -3,6 +3,9 @@
 *.log
 
 /docs/
+/hello/
+
+# Python
 
 /pyvenv.cfg
 /lib/python*/
@@ -11,7 +14,13 @@
 /include/site/python*/
 /__pycache__/
 
+# Erlang/Elixir
+
 *.beam
 /_build/
 /deps/
 /mix.lock
+
+# Nim
+
+/*.deps
