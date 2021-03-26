@@ -38,6 +38,7 @@ Y      += EDS.py
 N      += src/IDE.nim
 N      += src/syntax/generic.nim src/syntax/Nim.nim
 N      += src/syntax/Makefile.nim src/syntax/Python.nim
+S      += $(MODULE).nimble nim.cfg
 S      += $(Y) $(N)
 # / src
 
@@ -51,7 +52,9 @@ S      += $(Y) $(N)
 all: $(PY) metaL.py
 	$^ $@
 all:
-	$(NIMB) run
+	time $(NIMB) build --usenimcache --nimcache:$(TMP)/nim
+#	 --verbose
+	time $(NIMB) run
 	$(MAKE) format
 
 .PHONY: web
@@ -198,9 +201,10 @@ static/js/leaflet/leaflet.js: $(LEAFLET_GZ)
 # / install
 
 # \ merge
-MERGE += README.md Makefile .gitignore apt.txt apt.dev LICENSE doxy.gen
-MERGE += .vscode bin doc tmp src lib test
-MERGE += requirements.txt $(S) mix.exs .formatter.exs
+MERGE += README.md Makefile .gitignore apt.txt apt.dev LICENSE doxy.gen $(S)
+MERGE += .vscode bin doc tmp src
+MERGE += lib test mix.exs .formatter.exs
+MERGE += requirements.txt
 MERGE += geo
 
 .PHONY: main
