@@ -1,6 +1,6 @@
 const
     MODULE*  = "IDE"
-    TITLE*   = ""
+    TITLE*   = "native IDE written in Nim"
     AUTHOR*  = "Dmitry Ponyatov"
     EMAIL*   = "dponyatov@gmail.com"
     YEAR*    = 2020
