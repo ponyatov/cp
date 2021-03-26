@@ -12,3 +12,4 @@ bin = @["IDE"]
 # Dependencies
 
 requires "nim >= 1.4.4"
+requires "ui >=0.9.4"

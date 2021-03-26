@@ -21,7 +21,7 @@
 			"sequence": [
 				"workbench.action.files.saveAll",
 				{"command": "workbench.action.terminal.sendSequence",
-					"args": {"text": "\u000D clear ; make format \u000D"}}
+					"args": {"text": "\u000D clear ; make all \u000D"}}
 			]
 		},
 	],
@@ -41,8 +41,11 @@
 		"**/deps/**":true, "**/_build/**":true, "**/.elixir_ls/**":true,
 		// / ex
 		// \ cross
-		"/cross/buildroot-*/":true,
+		"**/cross/buildroot-*/**":true,
 		// / cross
+		// \ nim
+		"**/*.deps":true,
+		// / nim
 	},
 	"files.exclude": {
 		"**/docs/**":true,
@@ -56,6 +59,9 @@
 		// \ ex
 		"**/deps/**":true, "**/_build/**":true, "**/.elixir_ls/**":true,
 		// / ex
+		// \ nim
+		"**/*.deps":true,
+		// / nim
 	},
 	"files.associations": {
 		"requirements.*": "config",
