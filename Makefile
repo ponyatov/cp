@@ -35,9 +35,10 @@ P      += config.py
 Y      += $(MODULE).py test_$(MODULE).py
 Y      += metaL.py test_metaL.py
 Y      += EDS.py
-N      += src/IDE.nim
+N      += src/$(MODULE).nim
 N      += src/syntax/generic.nim src/syntax/Nim.nim
 N      += src/syntax/Makefile.nim src/syntax/Python.nim
+N      += src/syntax/metaL.nim src/parser.nim
 S      += $(MODULE).nimble nim.cfg
 S      += $(Y) $(N)
 # / src
@@ -72,8 +73,8 @@ format: $(PEP)
 	$(MIX) format
 $(PEP): $(Y)
 	$@ --ignore=E26,E302,E401,E402,E701,E702 --in-place $? && touch $@
-format:
-	$(NIMP) --indent:2 $(N)
+format: $(N)
+	$(NIMP) --indent:2 $<
 
 # \ elixir
 .PHONY: iex
