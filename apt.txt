@@ -4,3 +4,6 @@ sqlite3
 erlang elixir nodejs inotify-tools
 postgresql-12 postgresql-client-12
 openjdk-11-jdk clojure
+build-essential
+tcc
+libncurses-dev

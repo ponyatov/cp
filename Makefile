@@ -35,7 +35,10 @@ P      += config.py
 Y      += $(MODULE).py test_$(MODULE).py
 Y      += metaL.py test_metaL.py
 Y      += EDS.py
-S      += $(Y)
+N      += src/IDE.nim
+N      += src/syntax/generic.nim src/syntax/Nim.nim
+N      += src/syntax/Makefile.nim src/syntax/Python.nim
+S      += $(Y) $(N)
 # / src
 
 # \ obj
@@ -47,6 +50,8 @@ S      += $(Y)
 .PHONY: all
 all: $(PY) metaL.py
 	$^ $@
+all:
+	$(NIMB) run
 	$(MAKE) format
 
 .PHONY: web
@@ -64,6 +69,8 @@ format: $(PEP)
 	$(MIX) format
 $(PEP): $(Y)
 	$@ --ignore=E26,E302,E401,E402,E701,E702 --in-place $? && touch $@
+format:
+	$(NIMP) --indent:2 $(N)
 
 # \ elixir
 .PHONY: iex
@@ -88,7 +95,9 @@ doxy: doxy.gen
 doc: \
 	doc/SICP_ru.pdf doc/Dragon_ru.pdf \
 	doc/Erlang/LYSE_ru.pdf doc/Erlang/Armstrong_ru.pdf \
-	doc/Erlang/ElixirInAction.pdf doc/Erlang/Phoenix.pdf
+	doc/Erlang/ElixirInAction.pdf doc/Erlang/Phoenix.pdf \
+	doc/NimInAction.pdf
+
 doc/SICP_ru.pdf:
 	$(CURL) $@ https://newstar.rinet.ru/~goga/sicp/sicp.pdf
 doc/Dragon_ru.pdf:
@@ -101,6 +110,8 @@ doc/Erlang/ElixirInAction.pdf:
 	$(CURL) $@ https://github.com/levunguyen/CGDN-Ebooks/raw/master/Java/Elixir%20in%20Action%2C%202nd%20Edition.pdf
 doc/Erlang/Phoenix.pdf:
 	$(CURL) $@ http://www.r-5.org/files/books/computers/languages/erlang/phoenix/Chris_McCord_Bruce_Tate_Jose_Valim-Programming_Phoenix-EN.pdf
+doc/NimInAction.pdf:
+	$(CURL) $@ https://nim.nosdn.127.net/MTY3NjMzODI=/bmltd18wXzE1NzYxNTc0NDQwMTdfMWU4MDhiODUtZDM0Ni00OWFlLWJjYzUtMDg2ODIxMmMzMTIw
 # / doc
 
 # \ install
