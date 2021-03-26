@@ -1,3 +1,6 @@
+import config
+import metainfo
+
 import syntax/generic
 import parser
 

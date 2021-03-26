@@ -1,6 +1,7 @@
 # Nim language {#nim}
 
 * https://nim-lang.org/
+    * https://forum.nim-lang.org/
 
 ## Links
 
@@ -11,7 +12,16 @@
 * [salewski] Dr. Stefan Salewski <br>
     [Computer Programming with the Nim Programming Language -- A gentle Introduction](https://github.com/StefanSalewski/NimProgrammingBook/blob/master/nimprogramming.adoc)
 
+## Web
+
+### Karax
+### Jester
+
 ## GUI
+
+### `ui`
+
+* https://nicedoc.io/nim-lang/ui
 
 ### GTK
 
