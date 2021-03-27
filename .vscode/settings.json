@@ -47,6 +47,7 @@
 		"**/*.deps":true,
 		// / nim
 		// \ clojure
+		"**/target/**":true,
 		"**/.clj*/**":true,
 		"**/.lsp/**":true,
 		"**/.lein*/**":true,
@@ -69,6 +70,7 @@
 		"**/*.deps":true,
 		// / nim
 		// \ clojure
+		"**/target/**":true,
 		"**/.clj*/**":true,
 		"**/.lsp/**":true,
 		"**/.lein*/**":true,
