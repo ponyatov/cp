@@ -46,6 +46,12 @@
 		// \ nim
 		"**/*.deps":true,
 		// / nim
+		// \ clojure
+		"**/.clj*/**":true,
+		"**/.lsp/**":true,
+		"**/.lein*/**":true,
+		"**/.nrepl*/**":true,
+		// / clojure
 	},
 	"files.exclude": {
 		"**/docs/**":true,
@@ -62,6 +68,12 @@
 		// \ nim
 		"**/*.deps":true,
 		// / nim
+		// \ clojure
+		"**/.clj*/**":true,
+		"**/.lsp/**":true,
+		"**/.lein*/**":true,
+		"**/.nrepl*/**":true,
+		// / clojure
 	},
 	"files.associations": {
 		"requirements.*": "config",
