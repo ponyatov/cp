@@ -144,6 +144,8 @@ class Object:
 class Primitive(Object):
     def eval(self, env): return self
     def html(self): return f'{self.value}'
+    def json(self, depth=0, prefix=''):
+        return f'{prefix}{self.value},\n'
 
 class Nil(Primitive):
     fromstr = ['', '-', '--', '-?-']
@@ -157,6 +159,7 @@ class Nil(Primitive):
 ## floating point
 class Number(Primitive):
     def __init__(self, V, prec=4):
+#        Primitive.__init__(self, float(V))
         if V == None: Primitive.__init__(self, V)
         else: Primitive.__init__(self, float(V))
         ## precision: digits after `.`
@@ -179,6 +182,7 @@ class Number(Primitive):
 
 class Integer(Number):
     def __init__(self, V):
+#        Primitive.__init__(self, int(V))
         self.prec = 0
         if isinstance(V, int) or isinstance(V, float):
             Primitive.__init__(self, int(V))
@@ -224,6 +228,8 @@ class String(Primitive):
             elif c == '\t': ret += '\\t'
             else: ret += c
         return ret
+    def json(self, depth=0, prefix=''):
+        return f'{prefix}"{self.value}",\n'
 
 ## @}
 
@@ -290,10 +296,17 @@ class ms(Unit):
 ## @ingroup core
 ## @{
 
-class Container(Object): pass
+class Container(Object):
+    def __init__(self, V=''): super().__init__(V)
 
 ## ordered container
-class Vector(Container): pass
+class Vector(Container):
+    def json(self, depth=0, prefix=''):
+        ret = f'{prefix}{tab*depth}[\n'
+        for j in self.nest:
+            ret += j.json(depth + 1)
+        ret += f'{tab*depth}]\n'
+        return ret
 
 ## associative array
 class Map(Container): pass
