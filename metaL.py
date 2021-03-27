@@ -30,6 +30,15 @@ class Object:
         ## nest[]ed subgraphs = ordered container = vector = stack = queue = AST
         self.nest = []
 
+    ## Python types boxing
+    def box(self, that):
+        if isinstance(that, Object): return that
+        if isinstance(that,    int): return Integer(that)
+        if isinstance(that,    str): return String(that)
+        if that == None            : return Nil()
+        # unknown
+        raise TypeError(['box', type(that), that])
+
     ## @name text dump
 
     ## `print` callback
@@ -68,9 +77,26 @@ class Object:
     ## `:V>` object value for dump
     def val(self): return f'{self.value}'
 
-    ## @name serialization
+    ## @name de/serialize
 
+    ## [g]lobal [id] /unical identifier/
     def gid(self): return f'@{id(self):x}'
+
+    def json(self, depth=0, prefix=''):
+        ret = f'{prefix}{tab*depth}{{\n'
+        ret += f'{tab*(depth+1)}"type":"{self.__class__.__name__}",\n'
+        ret += f'{tab*(depth+1)}"value":"{self.value}",\n'
+        # slot{}
+        for i in self.slot:
+            ret += self[i].json(depth + 1, f'{tab*(depth+1)}"{i}":')
+        # nest[]
+        ret += f'{tab*(depth+1)}"nest":[\n'
+        for j in self.nest:
+            ret += j.json(depth + 1)
+        ret += f'{tab*(depth+1)}]\n'
+        # subtree
+        ret += f'{tab*depth}}},\n'
+        return ret
 
     ## @name operator
 
@@ -89,11 +115,10 @@ class Object:
 
     ## `A[key] = B`
     def __setitem__(self, key, that):
-        assert isinstance(key, str) or isinstance(key, int)
-        if isinstance(that, int): that = Integer(that)
-        if isinstance(that, str): that = String(that)
-        assert isinstance(that, Object)
-        self.slot[key] = that; return self
+        that = self.box(that)
+        if isinstance(key, str): self.slot[key] = that; return self
+        if isinstance(key, int): self.nest[key] = that; return self
+        raise TypeError([type(key), key, that])
 
     ## `A << B -> A[B.type] = B`
     def __lshift__(self, that):
@@ -105,8 +130,7 @@ class Object:
 
     ## `A // B -> A.push(B)`
     def __floordiv__(self, that):
-        if isinstance(that, str): that = String(that)
-        if isinstance(that, int): that = Integer(that)
+        that = self.box(that)
         assert isinstance(that, Object)
         self.nest += [that]; return self
 
