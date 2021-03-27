@@ -35,13 +35,13 @@ P      += config.py
 Y      += $(MODULE).py test_$(MODULE).py
 Y      += metaL.py test_metaL.py
 Y      += EDS.py
-N      += src/$(MODULE).nim src/config.nim src/metainfo.nim
+N      += src/IDE.nim src/config.nim src/metainfo.nim
 N      += src/syntax/generic.nim src/syntax/Nim.nim
 N      += src/syntax/Makefile.nim src/syntax/Python.nim
 N      += src/syntax/metaL.nim src/parser.nim
-S      += $(MODULE).nimble nim.cfg
+S      += IDE.nimble nim.cfg
 E      += src/hello.erl
-X      += mix.exs lib/$(MODULE).ex
+X      += mix.exs lib/scada.ex
 S      += $(Y) $(N) $(E) $(X)
 # / src
 
