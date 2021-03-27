@@ -1,93 +1,95 @@
 {
-	// \ py
-	"python.pythonPath"              : "./bin/python3",
-	"python.formatting.provider"     : "autopep8",
-	"python.formatting.autopep8Path" : "./bin/autopep8",
-	"python.formatting.autopep8Args" : ["--ignore=E26,E302,E401,E402,E701,E702"],
-	// / py
+    // \ py
+    "python.pythonPath"              : "./bin/python3",
+    "python.formatting.provider"     : "autopep8",
+    "python.formatting.autopep8Path" : "./bin/autopep8",
+    "python.formatting.autopep8Args" : ["--ignore=E26,E302,E401,E402,E701,E702"],
+    // / py
 
-	// \ multi
-	"multiCommand.commands": [
-		{
-			"command": "multiCommand.f11",
-			"sequence": [
-				"workbench.action.files.saveAll",
-				{"command": "workbench.action.terminal.sendSequence",
-					"args": {"text": "\u000D clear ; make test \u000D"}}
-			]
-		},
-		{
-			"command": "multiCommand.f12",
-			"sequence": [
-				"workbench.action.files.saveAll",
-				{"command": "workbench.action.terminal.sendSequence",
-					"args": {"text": "\u000D clear ; make all \u000D"}}
-			]
-		},
-	],
-	// / multi
+    // \ multi
+    "multiCommand.commands": [
+        {
+            "command": "multiCommand.f11",
+            "sequence": [
+                "workbench.action.files.saveAll",
+                {"command": "workbench.action.terminal.sendSequence",
+                    "args": {"text": "\u000D clear ; make test \u000D"}}
+                    "args": {"text": "\u000D make repl \u000D"}}
+            ]
+        },
+        {
+            "command": "multiCommand.f12",
+            "sequence": [
+                "workbench.action.files.saveAll",
+                {"command": "workbench.action.terminal.sendSequence",
+                    "args": {"text": "\u000D clear ; make all \u000D"}}
+                    "args": {"text": "\u000D System.stop \u000D"}}
+            ]
+        },
+    ],
+    // / multi
 
-	// \ files
-	"files.watcherExclude": {
-		"**/docs/**":true,
-		// \ py
-		"**/__pycache__/**":true, "**/.pytest_cache/**":true,
-		"**/bin/**":true,
-		"**/lib/python*/**":true, "**/lib64/**":true,
-		"**/share/**":true, "**/include/site/**":true,
-		"**/pyvenv.cfg":true, "**/*.pyc":true,
-		// / py
-		// \ ex
-		"**/deps/**":true, "**/_build/**":true, "**/.elixir_ls/**":true,
-		// / ex
-		// \ cross
-		"**/cross/buildroot-*/**":true,
-		// / cross
-		// \ nim
-		"**/*.deps":true,
-		// / nim
-		// \ clojure
-		"**/target/**":true,
-		"**/.clj*/**":true,
-		"**/.lsp/**":true,
-		"**/.lein*/**":true,
-		"**/.nrepl*/**":true,
-		// / clojure
-	},
-	"files.exclude": {
-		"**/docs/**":true,
-		// \ py
-		"**/__pycache__/**":true, "**/.pytest_cache/**":true,
-		"**/bin/**":true,
-		"**/lib/python*/**":true, "**/lib64/**":true,
-		"**/share/**":true, "**/include/site/**":true,
-		"**/pyvenv.cfg":true, "**/*.pyc":true,
-		// / py
-		// \ ex
-		"**/deps/**":true, "**/_build/**":true, "**/.elixir_ls/**":true,
-		// / ex
-		// \ nim
-		"**/*.deps":true,
-		// / nim
-		// \ clojure
-		"**/target/**":true,
-		"**/.clj*/**":true,
-		"**/.lsp/**":true,
-		"**/.lein*/**":true,
-		"**/.nrepl*/**":true,
-		// / clojure
-	},
-	"files.associations": {
-		"requirements.*": "config",
-		"*.br": "kconfig",
-		"*.kernel": "kconfig",
-	},
-	// / files
+    // \ files
+    "files.watcherExclude": {
+        "**/docs/**":true,
+        // \ py
+        "**/__pycache__/**":true, "**/.pytest_cache/**":true,
+        "**/bin/**":true,
+        "**/lib/python*/**":true, "**/lib64/**":true,
+        "**/share/**":true, "**/include/site/**":true,
+        "**/pyvenv.cfg":true, "**/*.pyc":true,
+        // / py
+        // \ ex
+        "**/_build/**":true, "**/target/**":true,
+        "**/deps/**":true, "**/.elixir_ls/**":true,
+        "**/.formatter.exs": true, "**/mix.lock": true,
+        // / ex
+        // \ cross
+        "**/cross/buildroot-*/**":true,
+        // / cross
+        // \ nim
+        "**/*.deps":true,
+        // / nim
+        // \ clojure
+        "**/.clj*/**":true, "**/.lsp/**":true,
+        "**/.lein*/**":true,
+        "**/.nrepl*/**":true,
+        // / clojure
+    },
+    "files.exclude": {
+        "**/docs/**":true,
+        // \ py
+        "**/__pycache__/**":true, "**/.pytest_cache/**":true,
+        "**/bin/**":true,
+        "**/lib/python*/**":true, "**/lib64/**":true,
+        "**/share/**":true, "**/include/site/**":true,
+        "**/pyvenv.cfg":true, "**/*.pyc":true,
+        // / py
+        // \ ex
+        "**/deps/**":true, "**/_build/**":true, "**/.elixir_ls/**":true,
+        // / ex
+        // \ nim
+        "**/*.deps":true,
+        // / nim
+        // \ clojure
+        "**/target/**":true,
+        "**/.clj*/**":true,
+        "**/.lsp/**":true,
+        "**/.lein*/**":true,
+        "**/.nrepl*/**":true,
+        // / clojure
+    },
+    "files.associations": {
+        "requirements.*": "config",
+        "*.br": "kconfig",
+        "*.kernel": "kconfig",
+    },
+    // / files
 
-	// \ editor
-	"editor.tabSize": 4,
-	"editor.rulers": [80],
-	"workbench.tree.indent": 32,
-	// / editor
-	"browser-preview.startUrl": "127.0.0.1:12345/"
+    // \ editor
+    "editor.tabSize": 4,
+    "editor.rulers": [80],
+    "workbench.tree.indent": 32,
+    // / editor
+    "browser-preview.startUrl": "127.0.0.1:12345/"
 }

@@ -40,7 +40,9 @@ N      += src/syntax/generic.nim src/syntax/Nim.nim
 N      += src/syntax/Makefile.nim src/syntax/Python.nim
 N      += src/syntax/metaL.nim src/parser.nim
 S      += $(MODULE).nimble nim.cfg
-S      += $(Y) $(N)
+E      += src/hello.erl
+X      += mix.exs lib/$(MODULE).ex
+S      += $(Y) $(N) $(E) $(X)
 # / src
 
 # \ obj
@@ -50,6 +52,8 @@ S      += $(Y) $(N)
 
 # \ all
 .PHONY: all
+all: $(S)
+	$(MAKE) test
 all: $(PY) metaL.py
 	$^ $@
 all:
@@ -58,31 +62,33 @@ all:
 	time $(NIMB) run
 	$(MAKE) format
 
+.PHONY: repl
+repl:
+	$(IEX) -S mix phx.server
+	$(IEX)  -S $(MIX)
+	$(MAKE) format
+	$(MAKE) $@
+
 .PHONY: web
 web: $(PY) metaL.py
 	$^ $@
 
 .PHONY: test
+test: $(E) $(X)
+	$(MIX)  test
 test: $(PYT) test_metaL.py
 	$^
 	$(MAKE) format
-	$(MIX)  test
 
 .PHONY: format
-format: $(PEP)
+format:
 	$(MIX) format
+format: $(PEP)
 $(PEP): $(Y)
 	$@ --ignore=E26,E302,E401,E402,E701,E702 --in-place $? && touch $@
 format: $(N)
 	$(NIMP) --indent:2 $<
 
-# \ elixir
-.PHONY: iex
-iex:
-	$(IEX) -S mix phx.server
-	$(MAKE) format
-	$(MAKE) $@
-# / elixir
 # / all
 
 # \ nginx
@@ -99,7 +105,7 @@ doxy: doxy.gen
 doc: \
 	doc/SICP_ru.pdf doc/Dragon_ru.pdf \
 	doc/Erlang/LYSE_ru.pdf doc/Erlang/Armstrong_ru.pdf \
-	doc/Erlang/ElixirInAction.pdf doc/Erlang/Phoenix.pdf \
+	doc/Erlang/ElixirInAction.pdf doc/Erlang/Phoenix.pdf
 	doc/NimInAction.pdf
 
 doc/SICP_ru.pdf:
@@ -125,7 +131,7 @@ install: $(OS)_install js doc
 	$(MIX) deps.get
 	$(MAKE) update
 	$(MIX) archive.install hex phx_new 1.5.8
-	$(MIX) ecto.create
+#	$(MIX) ecto.create
 .PHONY: update
 update: $(OS)_update
 	$(PIP) install -U    pip autopep8
@@ -137,6 +143,7 @@ update: $(OS)_update
 Linux_install Linux_update:
 	sudo apt update
 	sudo apt install -u `cat apt.txt apt.dev`
+
 # \ py
 $(PY) $(PIP):
 	python3 -m venv .
@@ -146,6 +153,7 @@ $(PYT):
 # / py
 # \ js
 .PHONY: js
+js:
 js: \
 	static/js/bootstrap.min.css static/js/bootstrap.dark.css \
 	static/js/bootstrap.min.js  static/js/jquery.min.js \
@@ -202,7 +210,8 @@ static/js/leaflet/leaflet.js: $(LEAFLET_GZ)
 # / install
 
 # \ merge
-MERGE += README.md Makefile .gitignore apt.txt apt.dev LICENSE doxy.gen $(S)
+MERGE += README.md Makefile .gitignore apt.txt apt.dev LICENSE $(S)
+MERGE += doxy.gen
 MERGE += .vscode bin doc tmp src
 MERGE += lib test mix.exs .formatter.exs
 MERGE += requirements.txt
