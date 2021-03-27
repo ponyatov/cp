@@ -1,5 +1,9 @@
 # Clojure {#clj}
 
+*  Russ Olsen <br>
+  **Getting Clojure: Build Your Functional Skills One Idea at a Time**
+* https://www.youtube.com/watch?v=ciGyHkDuPAE
+
 * generative metaprogramming
     * host language: Clojure
     * multiple target languages:
