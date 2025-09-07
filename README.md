@@ -5,4 +5,4 @@
 
 github: https://github.com/ponyatov/cp
 
-touch {hw,cpu,arch,os}/{inc,src}/.gitignore
+touch arch/x86_64/{inc,src}/.gitignore 
