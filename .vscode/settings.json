@@ -1,3 +1,4 @@
+{
     "files.exclude": {
         "doc/html": true, "**/node_modules/**": true,
     },

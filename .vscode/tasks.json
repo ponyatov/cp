@@ -43,6 +43,14 @@
             "group"          : {"kind": "build", "isDefault": true}
         },
         {
+            "label"          : "python: run",
+            "type"           : "shell",
+            "command"        : "python3 src/${workspaceFolderBasename}.py",
+            "problemMatcher" : [],
+            "presentation"   : {"showReuseMessage": true, "focus": true, "reveal": "silent", "close": false},
+            "group"          : {"kind": "build", "isDefault": true}
+        },
+        {
             "label"          : "doxy: gen",
             "type"           : "shell",
             "group"          : {"kind": "build", "isDefault": true },
