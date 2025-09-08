@@ -1,0 +1,28 @@
+{
+    "comments": {
+        "shebang"     :  "#!",
+        "lineComment" :  "//",
+        "blockComment": ["/*", "*/"],
+        "stackEffect": ["(", ")"]
+    },
+    "brackets": [
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"]
+    ],
+    "autoCloseBefore": ";:.,=}])> \n\t",
+    "autoClosingPairs": [
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"],
+        {"open": "\"", "close": "\"", "notIn": [ "string"            ]},
+        {"open": "'" , "close": "'" , "notIn": [ "string", "comment" ]}
+    ],
+    "surroundingPairs": [
+        ["{", "}"],
+        ["[", "]"],
+        ["(", ")"],
+        [ "\"", "\"" ],
+        [ "'" , "'"  ]
+    ]
+}
