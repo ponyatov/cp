@@ -1,4 +1,4 @@
-import os
+import os, sys
 
 ## data stack
 D = []
@@ -22,6 +22,7 @@ def nop():
 ## `( -- )` stop system
 def halt():
     if trace: print('halt')
+    sys.exit(0)
 
 ## `( -- )` dump system state
 def dump():
@@ -92,8 +93,10 @@ parser = yacc.yacc(debug=False, write_tables=False)
 def repl():
     if trace: print('repl')
     while True:
-        cmd = input('> ')
-        if cmd: parser.parse(cmd)
+        try:
+            parser.parse(input('> '))
+        except EOFError:
+            halt()
         dump()
 
 ## script entry

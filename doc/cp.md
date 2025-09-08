@@ -6,3 +6,4 @@
 github: https://github.com/ponyatov/cp
 
 ## [[cp/Intro]]
+## [[cp/REPL]]
