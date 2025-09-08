@@ -23,6 +23,11 @@ def nop():
 def halt():
     if trace: print('halt')
 
+## `( -- )` dump system state
+def dump():
+    if trace: print('dump')
+    print(D)
+
 ## `( name -- )` make directory
 def mkdir():
     name = pop()
@@ -32,12 +37,54 @@ def mkdir():
 ## @defgroup lexer
 ## @{
 import ply.lex as lex
+
+tokens = ['INT', 'ID']
+
+t_ignore = ' \t\r'
+
+t_ignore_shebang = '\#!.*'
+t_ignore_line_comment = '//.*'
+
+def t_newline(t):
+    r'\n+'
+    t.lexer.lineno += len(t.value)
+
+def t_INT(t):
+    r'[+\-]?\d+'
+    t.value = int(t.value)
+    return t
+
+def t_ID(t):
+    r'[a-zA-Z_][a-zA-Z0-9_]*'
+    return t
+
+def t_error(t): raise SyntaxError(t)
+
 lexer = lex.lex()
 ## @}
 
 ## @defgroup parser
 ## @{
 import ply.yacc as yacc
+
+def p_REPL_none(p):
+    ' REPL : '
+    pass
+
+def p_REPL_recur(p):
+    ' REPL : REPL cmd '
+    pass
+
+def p_cmd_int(p):
+    ' cmd : INT '
+    push(int(p[1]))
+
+def p_cmd_id(p):
+    ' cmd : ID '
+    push(p[1])
+
+def p_error(p): raise SyntaxError(p)
+
 parser = yacc.yacc(debug=False, write_tables=False)
 ## @}
 
@@ -46,8 +93,8 @@ def repl():
     if trace: print('repl')
     while True:
         cmd = input('> ')
-        if not cmd: break
-        parser.parse(cmd)
+        if cmd: parser.parse(cmd)
+        dump()
 
 ## script entry
 if __name__ == '__main__':

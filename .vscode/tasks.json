@@ -45,7 +45,7 @@
         {
             "label"          : "python: run",
             "type"           : "shell",
-            "command"        : "python3 src/${workspaceFolderBasename}.py",
+            "command"        : "python3 src/${workspaceFolderBasename}.py lib/${workspaceFolderBasename}.ini",
             "problemMatcher" : [],
             "presentation"   : {"showReuseMessage": true, "focus": true, "reveal": "silent", "close": false},
             "group"          : {"kind": "build", "isDefault": true}

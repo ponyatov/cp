@@ -1,0 +1,45 @@
+{
+    "name"       : "cp",
+    "displayName": "cp",
+    "description": "Concatenative Programming",
+    "version"    : "0.0.1",
+    "icon"       : "logo.png",
+    "publisher"  : "dponyatov",
+    "license"    : "MIT",
+    "engines": {
+        "vscode": "^1.90.0"
+    },
+    "categories": [
+        "Programming Languages", "Debuggers"
+    ],
+    "keywords": [
+        "bytecode", "FORTH", "CLI", "REPL", "script", "interpreter"
+    ],
+    "bugs": {
+        "url": "https://github.com/ponyatov/cp/issue"
+    },
+    "homepage": "https://github.com/ponyatov/cp",
+    "repository": {
+        "type": "git",
+        "url" : "https://github.com/ponyatov/cp/tree/dponyatov/vscode"
+    },
+    "activationEvents": [
+        "workspaceContains:lib/*.ini",
+        "workspaceContains:lib/*.f"
+    ],
+    "extensionDependencies": [
+    ],
+    "main": "extension.js",
+    "contributes": {
+        "languages": [{
+            "id"           :  "cp",
+            "extensions"   : [".ini", ".f"],
+            "configuration":  "languageConfiguration.json"
+        }],
+        "grammars": [{
+            "language" : "cp",
+            "scopeName": "source.cp",
+            "path"     : "tmLanguage.json"
+        }]
+    }
+}
